@@ -21,10 +21,11 @@ class Graph:
       else:
          self.graph[u].append(v)
 
-   '''
-   Function to print a breadth_first_search of graph
-   '''
+
    def breadth_first_search(self, s):
+      '''
+      Function to print a breadth_first_search of graph
+      '''
       # Mark all the vertices as not visited
       visited = [False] * (max(self.graph) + 1)
 
