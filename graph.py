@@ -1,5 +1,5 @@
-# Python3 Program to print BFS traversal
-# from a given source vertex. BFS(int s)
+# Python3 Program to print breadth_first_search traversal
+# from a given source vertex. breadth_first_search(int s)
 # traverses vertices reachable from s.
 
 # This class represents a directed graph
@@ -15,18 +15,20 @@ class Graph:
       self.graph = {}
 
    # function to add an edge to graph
-   def addEdge(self, u, v):
+   def add_edge(self, u, v):
       if not u in self.graph:
          self.graph[u] = [v]
       else:
          self.graph[u].append(v)
 
-   # Function to print a BFS of graph
-   def BFS(self, s):
+   '''
+   Function to print a breadth_first_search of graph
+   '''
+   def breadth_first_search(self, s):
       # Mark all the vertices as not visited
       visited = [False] * (max(self.graph) + 1)
 
-      # Create a queue for BFS
+      # Create a queue for breadth_first_search
       queue = []
 
       # Mark the source node as
@@ -50,19 +52,17 @@ class Graph:
                queue.append(i)
                visited[i] = True
 
-# Driver code
 
+if __name__ == '__main__':
+   # Create a graph given in the above diagram
+   g = Graph()
+   g.add_edge(0, 1)
+   g.add_edge(0, 2)
+   g.add_edge(1, 2)
+   g.add_edge(2, 0)
+   g.add_edge(2, 3)
+   g.add_edge(3, 3)
 
-# Create a graph given in
-# the above diagram
-g = Graph()
-g.addEdge(0, 1)
-g.addEdge(0, 2)
-g.addEdge(1, 2)
-g.addEdge(2, 0)
-g.addEdge(2, 3)
-g.addEdge(3, 3)
-
-print("Following is Breadth First Traversal"
-   " (starting from vertex 2)")
-g.BFS(2)
+   print("Following is Breadth First Traversal"
+      " (starting from vertex 2)")
+   g.breadth_first_search(2)
