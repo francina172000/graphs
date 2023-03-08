@@ -1,5 +1,5 @@
-// Java program to print BFS traversal from a given source
-// vertex. BFS(int s) traverses vertices reachable from s.
+// Java program to print breadthFirstSearch traversal from a given source
+// vertex. breadthFirstSearch(int s) traverses vertices reachable from s.
 import java.io.*;
 import java.util.*;
 
@@ -21,14 +21,14 @@ class Graph {
 	// Function to add an edge into the graph
 	void addEdge(int v, int w) { adj[v].add(w); }
 
-	// prints BFS traversal from a given source s
-	void BFS(int s)
+	// prints breadthFirstSearch traversal from a given source s
+	void breadthFirstSearch(int s)
 	{
 		// Mark all the vertices as not visited(By default
 		// set as false)
 		boolean visited[] = new boolean[V];
 
-		// Create a queue for BFS
+		// Create a queue for breadthFirstSearch
 		LinkedList<Integer> queue
 			= new LinkedList<Integer>();
 
@@ -55,10 +55,7 @@ class Graph {
 		}
 	}
 
-   void DFS(int s){
-   }
-
-	// Driver method to
+ 	// Driver method to
 	public static void main(String args[])
 	{
 		Graph g = new Graph(4);
@@ -74,7 +71,7 @@ class Graph {
 			"Following is Breadth First Traversal "
 			+ "(starting from vertex 2)");
 
-		g.BFS(2);
+		g.breadthFirstSearch(2);
 	}
 }
 
