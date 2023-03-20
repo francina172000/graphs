@@ -2,6 +2,7 @@
 // vertex. breadthFirstSearch(int s) traverses vertices reachable from s.
 import java.io.*;
 import java.util.*;
+import java.util.HashMap;
 
 // This class represents a directed graph using adjacency
 // list representation
@@ -24,35 +25,42 @@ class Graph {
 	// prints breadthFirstSearch traversal from a given source s
 	void breadthFirstSearch(int s)
 	{
-		// Mark all the vertices as not visited(By default
-		// set as false)
-		boolean visited[] = new boolean[V];
 
-		// Create a queue for breadthFirstSearch
-		LinkedList<Integer> queue
-			= new LinkedList<Integer>();
-
-		// Mark the current node as visited and enqueue it
-		visited[s] = true;
-		queue.add(s);
-
-		while (queue.size() != 0) {
-			// Dequeue a vertex from queue and print it
-			s = queue.poll();
-			System.out.print(s + " ");
-
-			// Get all adjacent vertices of the dequeued
-			// vertex s If a adjacent has not been visited,
-			// then mark it visited and enqueue it
-			Iterator<Integer> i = adj[s].listIterator();
-			while (i.hasNext()) {
-				int n = i.next();
-				if (!visited[n]) {
-					visited[n] = true;
-					queue.add(n);
+	}
+	int[] shortestPath(int start, int end){
+		HashMap<Integer, Integer> prev = new HashMap<Integer, Integer>();
+		ArrayList<Integer> queue = new ArrayList<Integer>();
+		boolean []visited = new boolean[V];
+		queue.add(start);
+		while (queue.size() > 0){
+			int parent = queue.remove(0);
+			ListIterator iter = adj[parent].listIterator();
+			while (iter.hasNext()){
+				Integer node = (Integer)iter.next();
+				if (!visited[node]){
+					prev.put(node, parent);
+					visited[node] = true;
+					queue.add(node);
 				}
 			}
 		}
+
+		ArrayList<Integer> path = new ArrayList<Integer>();
+		path.add(end);
+		int node = end;
+		while (! path.contains(start)){
+			path.add(prev.get(node));
+			node = prev.get(node);
+		}
+
+		int []flippedPath = new int[path.size()];
+		int next = 0;
+		for (int i = path.size()-1; i >=0; i--){
+			flippedPath[next] = path.get(i);
+			next++;
+		}
+
+		return flippedPath;
 	}
 
  	// Driver method to
@@ -61,17 +69,29 @@ class Graph {
 		Graph g = new Graph(4);
 
 		g.addEdge(0, 1);
+		g.addEdge(1, 0);
 		g.addEdge(0, 2);
-		g.addEdge(1, 2);
 		g.addEdge(2, 0);
+		g.addEdge(1, 2);
+		g.addEdge(2, 1);
 		g.addEdge(2, 3);
-		g.addEdge(3, 3);
+		g.addEdge(3, 2);
+		g.addEdge(1, 3);
+		g.addEdge(3, 1);
 
+		/* 
 		System.out.println(
 			"Following is Breadth First Traversal "
 			+ "(starting from vertex 2)");
 
 		g.breadthFirstSearch(2);
+		*/
+		int []path = g.shortestPath(0, 3);
+		String pathString = "";
+		for (int i = 0; i < path.length; i++){
+			pathString+=path[i]+" ";
+		}
+		System.out.println(pathString);
 	}
 }
 
