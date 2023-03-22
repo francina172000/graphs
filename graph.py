@@ -21,6 +21,38 @@ class Graph:
       else:
          self.graph[u].append(v)
 
+   def get_num_nodes(self):
+      unique_nodes = {}
+      for u in self.graph:
+         unique_nodes[u] = 1
+         for v in self.graph[u]:
+            unique_nodes[v] = 1
+      return max(self.graph)+1
+
+   def cycle_from(self, start):
+      num_nodes = self.get_num_nodes()
+
+      visited = [False] * (num_nodes)
+      stack = []
+      stack.append(start)
+      visited[start] = True
+      while stack:
+         node = stack.pop()
+         adjacency = self.graph[node]
+         for n in adjacency:
+            if n == start:
+               return True
+            if not visited[n]:
+               stack.append(n)
+               visited[n] = True
+      return False
+   
+   def is_cyclic(self):
+      for start in self.graph:
+         cycle = self.cycle_from(start)
+         if cycle:
+            return True
+      return False
 
    def shortest_path(self, start, end):
       prev = {}
@@ -83,19 +115,11 @@ class Graph:
 if __name__ == '__main__':
    # Create a graph given in the above diagram
    g = Graph()
-   g.add_edge(0, 1)
-   g.add_edge(1, 0)
-   g.add_edge(0, 2)
-   g.add_edge(2, 0)
-   g.add_edge(1, 2)
-   g.add_edge(2, 1)
-   g.add_edge(2, 3)
-   g.add_edge(3, 2)
-   g.add_edge(1, 3)
-   g.add_edge(3, 1)
+   g.add_edge(0,1)
+   g.add_edge(0,2)
+   g.add_edge(2,3)
+   g.add_edge(1,3)
+   g.add_edge(3,4)
+   g.add_edge(4,1)
 
-   #print("Following is Breadth First Traversal"
-   #   " (starting from vertex 2)")
-   #g.breadth_first_search(2)
-
-print(g.shortest_path(0, 3))
+print(g.is_cyclic())

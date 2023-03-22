@@ -22,6 +22,36 @@ class Graph {
 	// Function to add an edge into the graph
 	void addEdge(int v, int w) { adj[v].add(w); }
 
+	boolean cycleFrom(int start){
+		boolean []visited = new boolean[V];
+		ArrayList<Integer> stack = new ArrayList<Integer>();
+		stack.add(start);
+		visited[start] = true;
+		while (stack.size() > 0){
+			Integer node = stack.remove(stack.size()-1);
+			Iterator<Integer> iter = adj[node].iterator();
+			while (iter.hasNext()){
+				Integer next = iter.next();
+				if (next == start){
+					return true;
+				}
+				if (!visited[next]){
+					stack.add(next);
+					visited[next] = true;
+				}
+			}
+		}
+		return false;
+	}
+	boolean isCyclic(){
+		for (int i = 0; i < V; i++){
+			boolean cycle = cycleFrom(i);
+			if (cycle){
+				return true;
+			}
+		}
+		return false;
+	}
 	// prints breadthFirstSearch traversal from a given source s
 	void breadthFirstSearch(int s)
 	{
@@ -66,18 +96,14 @@ class Graph {
  	// Driver method to
 	public static void main(String args[])
 	{
-		Graph g = new Graph(4);
+		Graph g = new Graph(5);
 
-		g.addEdge(0, 1);
-		g.addEdge(1, 0);
-		g.addEdge(0, 2);
-		g.addEdge(2, 0);
-		g.addEdge(1, 2);
-		g.addEdge(2, 1);
-		g.addEdge(2, 3);
-		g.addEdge(3, 2);
-		g.addEdge(1, 3);
-		g.addEdge(3, 1);
+		g.addEdge(0,1);
+		g.addEdge(0,2);
+		g.addEdge(2,3);
+		g.addEdge(1,3);
+		g.addEdge(3,4);
+		g.addEdge(4,1);
 
 		/* 
 		System.out.println(
@@ -85,13 +111,15 @@ class Graph {
 			+ "(starting from vertex 2)");
 
 		g.breadthFirstSearch(2);
-		*/
+		
 		int []path = g.shortestPath(0, 3);
 		String pathString = "";
 		for (int i = 0; i < path.length; i++){
 			pathString+=path[i]+" ";
 		}
 		System.out.println(pathString);
+		*/
+		System.out.println(g.isCyclic());
 	}
 }
 
