@@ -30,96 +30,152 @@ class Graph:
       return max(self.graph)+1
 
    def cycle_from(self, start):
-      num_nodes = self.get_num_nodes()
-
-      visited = [False] * (num_nodes)
-      stack = []
-      stack.append(start)
-      visited[start] = True
-      while stack:
-         node = stack.pop()
-         adjacency = self.graph[node]
-         for n in adjacency:
-            if n == start:
-               return True
-            if not visited[n]:
-               stack.append(n)
-               visited[n] = True
+      queue=[]
+      visited=[]
+      queue.append(start)
+      visited.append(start)
+      l=len(queue)
+      while l >0:
+         ele=queue.pop(0)
+         if ele in self.graph:
+            x=self.graph[ele]
+            for i in x:
+               if i==start:
+                  return True
+               if i not in visited:
+                  visited.append(i)
+                  queue.append(i)
+         l=len(queue)
       return False
+      
    
    def is_cyclic(self):
-      for start in self.graph:
-         cycle = self.cycle_from(start)
+      for i in self.graph:
+         cycle=self.cycle_from(i)
          if cycle:
             return True
       return False
 
+      
+
    def shortest_path(self, start, end):
-      prev = {}
-      visited = [False] * (max(self.graph) + 1)
-      queue = []
-      queue.append(start)
-      visited[start] = True
+            
+            queue=[]
+            visited=[]
+            thisdict={}
+            queue.append(start)
+            visited.append(start)
+            l=len(queue)
+            while l >0:
+               ele=queue.pop(0)
+               if ele in self.graph:
+                  list=[]
+                  x=self.graph[ele]
+                  for i in x:
+                     if i not in visited:
+                        visited.append(i)
+                        queue.append(i)
+                        list.append(i)
+                        thisdict[ele]=list
+               l=len(queue)
+            create=[]
+            create.append(end)
+            def get_key_for_value_in_list(val):
+               for key, value_list in thisdict.items():
+                  if val in value_list:
+                     return key
+            l=len(create)
+            while start not in create:
+               v=create[l-1]
+               key=get_key_for_value_in_list(v)
+               create.append(key)
+               l=len(create)
+            create.reverse()
+            return create
+      
+   
+   def is_cyclic(self):
+      for i in self.graph:
+         cycle=self.cycle_from(i)
+         if cycle:
+            return True
+      return False
 
-      while queue:
-         parent = queue.pop(0)
-         neighbores = self.graph[parent]
-         for node in neighbores:
-            if not visited[node]:
-               visited[node] = True
-               prev[node] = parent
-               queue.append(node)
 
-      path = []
-      node = end
-      path.append(node)
-      while not start in path:
-         path.append(prev[node])
-         node = prev[node]
 
-      path.reverse()
-      return path
+      
+      
+      
 
-   def breadth_first_search(self, s):
-      '''
-      Function to print a breadth_first_search of graph
-      '''
-      # Mark all the vertices as not visited
-      visited = [False] * (max(self.graph) + 1)
-
-      # Create a queue for breadth_first_search
-      queue = []
-
-      # Mark the source node as
-      # visited and enqueue it
+   
+   def depth_first_search(self, s,end):
+      visited=[]
+      queue=[]
+      thisdict={}
+      visited.append(s)
       queue.append(s)
-      visited[s] = True
+      l=len(queue)
+      
+      while l>0:
+         list=[]
+         if queue[l-1] in self.graph:
+             x=self.graph[queue[l-1]]
+      
 
-      while queue:
+             for i in x:
+               if(i in visited)!=1:
+                  queue.append(i)
+                  visited.append(i)
+                  list.append(i)
+                  thisdict[queue[l-1]]=list
+                  break
+            
+             if l==len(queue):
+                queue.pop(l-1)
+            
 
-         # Dequeue a vertex from
-         # queue and print it
-         s = queue.pop(0)
-         print(s, end=" ")
-
-         # Get all adjacent vertices of the
-         # dequeued vertex s. If a adjacent
-         # has not been visited, then mark it
-         # visited and enqueue it
-         for i in self.graph[s]:
-            if visited[i] == False:
-               queue.append(i)
-               visited[i] = True
-
-
+             l=len(queue)
+      # for i in visited:
+      #    print(i,end=" ") 
+      # # print(thisdict)
+   
+      create=[]
+      create.append(end)
+      def get_key_for_value_in_list(val):
+         for key, value_list in thisdict.items():
+            if val in value_list:
+               return key
+      l=len(create)
+      while s not in create:
+         v=create[l-1]
+         key=get_key_for_value_in_list(v)
+         create.append(key)
+         l=len(create)
+      create.reverse()
+      return create
+   
+      
+      
+# dfs code is valid only for undirected graph rest 2 are for directed as well as undirected.
+   
 if __name__ == '__main__':
    # Create a graph given in the above diagram
    g = Graph()
    g.add_edge(0,1)
-   g.add_edge(0,2)
-   g.add_edge(2,3)
-   g.add_edge(1,3)
-   g.add_edge(3,4)
-   g.add_edge(4,1)
+   g.add_edge(1,0)
 
+   g.add_edge(0,2)
+   g.add_edge(2,0)
+   g.add_edge(2,3)
+   g.add_edge(3,2)
+   g.add_edge(1,3)
+   g.add_edge(3,1)
+   g.add_edge(3,4)
+   g.add_edge(4,3)
+   g.add_edge(4,1)
+   g.add_edge(1,4)
+
+
+print(g.depth_first_search(0,4))
+print(g.shortest_path(0 ,4))
 print(g.is_cyclic())
